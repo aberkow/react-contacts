@@ -46,35 +46,22 @@
 
 	'use strict';
 	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	//IMPORTANT - SEE BELOW
 	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactDom = __webpack_require__(38);
-	
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(38);
 	
 	var router = __webpack_require__(168);
 	var Router = router.Router;
 	var Route = router.Route;
 	var hashHistory = router.hashHistory;
-	
-	/*What's the ES6 way of doing this?*/
+	var IndexRoute = router.IndexRoute;
+	var Link = router.Link;
 	
 	var CONTACTS = {
 	  0: {
 	    id: 0,
-	    name: 'Sara Hughes',
+	    name: 'Sarah Hughes',
 	    phoneNumber: '01234 567890'
 	  },
 	  1: {
@@ -89,96 +76,181 @@
 	  }
 	};
 	
-	var Contact = function (_React$Component) {
-	  _inherits(Contact, _React$Component);
+	var Contact = function Contact(props) {
+	  return React.createElement(
+	    'div',
+	    null,
+	    React.createElement(
+	      'strong',
+	      null,
+	      React.createElement(
+	        Link,
+	        { to: '/contacts/' + props.id },
+	        props.name
+	      )
+	    ),
+	    ' ',
+	    props.phoneNumber
+	  );
+	};
 	
-	  function Contact(props) {
-	    _classCallCheck(this, Contact);
+	var ContactList = function ContactList(props) {
+	  var contacts = Object.keys(props.contacts).map(function (contactId, index) {
+	    var contact = props.contacts[contactId];
+	    return React.createElement(
+	      'li',
+	      { key: index },
+	      React.createElement(Contact, { id: contact.id, name: contact.name, phoneNumber: contact.phoneNumber })
+	    );
+	  });
+	  return React.createElement(
+	    'ul',
+	    null,
+	    contacts
+	  );
+	};
 	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Contact).call(this, props));
-	  }
+	var ContactContainer = function ContactContainer(props) {
+	  var contact = CONTACTS[props.params.contactId];
+	  return React.createElement(Contact, { id: contact.id, name: contact.name, phoneNumber: contact.phoneNumber });
+	};
 	
-	  _createClass(Contact, [{
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	          'strong',
-	          null,
-	          this.props.name
-	        ),
-	        ' ',
-	        this.props.phoneNumber
-	      );
-	    }
-	  }]);
+	var ContactListContainer = function ContactListContainer() {
+	  return React.createElement(ContactList, { contacts: CONTACTS });
+	};
 	
-	  return Contact;
-	}(_react2.default.Component);
+	var App = function App(props) {
+	  return React.createElement(
+	    'div',
+	    null,
+	    React.createElement(
+	      'h1',
+	      null,
+	      'Contacts App'
+	    ),
+	    React.createElement(
+	      'div',
+	      null,
+	      props.children
+	    )
+	  );
+	};
 	
-	var ContactList = function (_React$Component2) {
-	  _inherits(ContactList, _React$Component2);
-	
-	  function ContactList(props) {
-	    _classCallCheck(this, ContactList);
-	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(ContactList).call(this, props));
-	  }
-	
-	  _createClass(ContactList, [{
-	    key: 'render',
-	    value: function render() {
-	      var contacts = Object.keys(this.props.contacts).map(function (contactId, index) {
-	        var contact = this.props.contacts[contactId];
-	        return _react2.default.createElement(
-	          'li',
-	          { key: index },
-	          _react2.default.createElement(Contact, { id: contact.id,
-	            name: contact.name,
-	            phoneNumber: contact.phoneNumber })
-	        );
-	      });
-	      return _react2.default.createElement(
-	        'ul',
-	        null,
-	        contacts
-	      );
-	    }
-	  }]);
-	
-	  return ContactList;
-	}(_react2.default.Component);
-	
-	var ContactListContainer = function (_React$Component3) {
-	  _inherits(ContactListContainer, _React$Component3);
-	
-	  function ContactListContainer(props) {
-	    _classCallCheck(this, ContactListContainer);
-	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(ContactListContainer).call(this, props));
-	  }
-	
-	  _createClass(ContactListContainer, [{
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(ContactList, { contacts: CONTACTS });
-	    }
-	  }]);
-	
-	  return ContactListContainer;
-	}(_react2.default.Component);
-	
-	var routes = _react2.default.createElement(
+	//var routes MUST come after ContactListContainer. otherwise the component doesn't
+	//exist yet.
+	//this shows nested routes.
+	/*
+	IndexRoute should be used for any routes which don't alter the parent Route; the component should appear at /contacts rather than /contacts/foo or /contacts/foo/bar.
+	*/
+	var routes = React.createElement(
 	  Router,
 	  { history: hashHistory },
-	  _react2.default.createElement(Route, { path: '/contacts', component: ContactListContainer })
+	  React.createElement(Route, { path: '/', component: App }),
+	  React.createElement(
+	    Route,
+	    { path: '/contacts', component: App },
+	    React.createElement(IndexRoute, { component: ContactListContainer }),
+	    React.createElement(Route, { path: ':contactId', component: ContactContainer })
+	  )
 	);
 	
 	document.addEventListener('DOMContentLoaded', function () {
-	  _reactDom2.default.render(routes, document.getElementById('app'));
+	  ReactDOM.render(routes, document.getElementById('app'));
 	});
+	
+	// import React from 'react';
+	// import ReactDOM from 'react-dom';
+	//
+	// var router = require('react-router');
+	// var Router = router.Router;
+	// var Route = router.Route;
+	// var hashHistory = router.hashHistory;
+	//
+	// /*What's the ES6 way of doing this?*/
+	//
+	// var CONTACTS = {
+	//   0: {
+	//     id: 0,
+	//     name: 'Sara Hughes',
+	//     phoneNumber: '01234 567890'
+	//   },
+	//   1: {
+	//     id: 1,
+	//     name: 'Tim Taylor',
+	//     phoneNumber: '02345 678901'
+	//   },
+	//   2: {
+	//     id: 2,
+	//     name: 'Sam Smith',
+	//     phoneNumber: '03456 789012'
+	//   }
+	// };
+	//
+	// class Contact extends React.Component {
+	//   constructor(props){
+	//     super(props);
+	//   }
+	//   render(){
+	//     return(
+	//       <div>
+	//         <strong>{this.props.name}</strong>
+	//         &nbsp;
+	//         {this.props.phoneNumber}
+	//       </div>
+	//     );
+	//   }
+	// }
+	//
+	// class ContactList extends React.Component {
+	//   constructor(props){
+	//     super(props);
+	//   }
+	//
+	//   render(){
+	//     console.log(this.props, 'from outside render');
+	//     var contacts = Object.keys(this.props.contacts).map(function(contact, index){
+	//       console.log(contact, index, 'from map');
+	//     });
+	//     console.log(contacts);
+	//     return(
+	//       <ul>
+	//         {contacts}
+	//       </ul>
+	//     );
+	//   }
+	// }
+	//
+	// // var contacts = Object.keys(this.props.contacts).map(function(contactId, index){
+	// //   var contact = this.props.contacts[contactId];
+	// //   return(
+	// //     <li key={index}>
+	// //       <Contact id={contact.id}
+	// //         name={contact.name}
+	// //         phoneNumber={contact.phoneNumber} />
+	// //     </li>
+	// //   );
+	// // });
+	//
+	// class ContactListContainer extends React.Component {
+	//   constructor(props){
+	//     super(props);
+	//   }
+	//   render(){
+	//     return (
+	//       <ContactList contacts={CONTACTS} />
+	//     );
+	//   }
+	// }
+	//
+	// var routes = (
+	//   <Router history={hashHistory}>
+	//     <Route path='/contacts' component={ContactListContainer} />
+	//   </Router>
+	// );
+	//
+	// document.addEventListener('DOMContentLoaded', function(){
+	//   ReactDOM.render(routes, document.getElementById('app'));
+	// });
 
 /***/ },
 /* 1 */
